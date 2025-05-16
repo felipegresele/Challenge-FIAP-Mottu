@@ -11,6 +11,7 @@ import Login from './src/pages/Login';
 import Dashboard from './src/pages/Dashboard';
 import MapaPatio from './src/pages/MapaPatio';
 import CheckMoto from './src/pages/CheckMoto';
+import Teste from './src/pages/Teste';
 
 
 export default function App() {
@@ -19,12 +20,27 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='MapaPatio' screenOptions={{ headerShown: false}}>
-        <Stack.Screen name="BoasVindas" component={BoasVindas}/>
+      <Stack.Navigator 
+        initialRouteName='Dashboard' 
+        screenOptions={{ 
+          headerShown: true, 
+          headerStyle: {
+          backgroundColor: "black",
+      },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          
+      }}
+      >
+        <Stack.Screen name="BoasVindas" component={BoasVindas} options={{
+          headerShown: false,
+        }}/>
         <Stack.Screen name="CheckMoto" component={CheckMoto}/>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Teste" component={Teste} />
         <Stack.Screen name="Cadastro" component={Cadastro} />
-        <Stack.Screen name="MapaPatio" component={MapaPatio}/>
         <Stack.Screen name="Dashboard" component={Dashboard}  />
     </Stack.Navigator>
     </NavigationContainer>      

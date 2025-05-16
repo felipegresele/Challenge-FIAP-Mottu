@@ -1,14 +1,19 @@
 import React from 'react';
-import { Text, TextInput, View, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { RootStackParamList } from '../routes/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-//Tipagem para Props da tela de cadastro
 type Props = NativeStackScreenProps<RootStackParamList, "Login">
 
 function Login({ navigation }: Props) {
-  const { control, handleSubmit, formState: { errors } } = useForm({});
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({});
+
+  interface FormData {
+    username: string,
+    email: string,
+    password: string,
+  }
 
   function handleSignIn(data: any) {
     console.log(data);
@@ -17,6 +22,12 @@ function Login({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate="BoasVindas"}>
+          
+        </TouchableOpacity>
+        <Text></Text>
+      </View>
       <Text style={styles.title}>Login</Text>
 
       {/* Campo Usuário */}
@@ -38,8 +49,9 @@ function Login({ navigation }: Props) {
           </View>
         )}
       />
-     {errors.username?.message && typeof errors.username.message === 'string' && (
-      <Text style={styles.labelError}>{errors.username.message}</Text>)}
+      {errors.username?.message && typeof errors.username.message === 'string' && (
+        <Text style={styles.labelError}>{errors.username.message}</Text>
+      )}
 
       {/* Campo Email */}
       <Controller
@@ -70,10 +82,13 @@ function Login({ navigation }: Props) {
       <Controller
         control={control}
         name="password"
-        rules={{ required: 'Senha é obrigatória',minLength: {
-          value:5,
-          message: "Deve ter pelo menos 5 caracteres"
-        } }}
+        rules={{
+          required: 'Senha é obrigatória',
+          minLength: {
+            value: 5,
+            message: "Deve ter pelo menos 5 caracteres"
+          }
+        }}
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Senha:</Text>
@@ -89,7 +104,9 @@ function Login({ navigation }: Props) {
           </View>
         )}
       />
-      {errors.password?.message && typeof errors.password?.message === "string" && <Text style={styles.labelError}>{errors.password.message}</Text>}
+      {errors.password?.message && typeof errors.password.message === 'string' && (
+        <Text style={styles.labelError}>{errors.password.message}</Text>
+      )}
 
       {/* Botão */}
       <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignIn)}>
@@ -107,34 +124,34 @@ function Login({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000', // fundo preto
+    backgroundColor: '#000000',
     justifyContent: 'center',
     paddingHorizontal: 30,
     alignItems: "center",
-    alignContent: "center",
   },
   title: {
-    fontSize: 24,
-    color: '#fff',
+    fontSize: 26,
+    color: '#00A859',
     alignSelf: 'center',
     marginBottom: 30,
+    fontWeight: 'bold',
   },
   inputGroup: {
     marginBottom: 15,
   },
   label: {
-    color: '#fff',
+    color: '#ffffff',
     marginBottom: 5,
   },
   input: {
     width: 300,
-    backgroundColor: '#1a1a1a',
-    color: '#fff',
+    backgroundColor: '#1C1C1C',
+    color: '#ffffff',
     borderRadius: 5,
     padding: 10,
   },
   button: {
-    backgroundColor: '#FFD700', // amarelo
+    backgroundColor: '#00A859',
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 20,
@@ -142,20 +159,22 @@ const styles = StyleSheet.create({
     width: 200,
   },
   buttonText: {
-    color: '#000',
+    color: '#ffffff',
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 16,
   },
   link: {
-    color: '#fff',
+    color: '#888888',
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 13,
+    marginTop: 10,
   },
   labelError: {
-    color: "#ff375b",
-    alignSelf: "center",
-    marginBottom: 2,
+    color: "#FF375B",
+    alignSelf: "flex-start",
+    marginBottom: 5,
+    marginLeft: 5,
   }
 });
 

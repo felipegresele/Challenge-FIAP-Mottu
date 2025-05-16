@@ -2,10 +2,12 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { RootStackParamList } from "../routes/types";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { data, StatusData } from "../api/total_motos"
+import { useState } from "react";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Dashboard">;
 
 function Dashboard({ navigation }: Props) {
+  const [selectedValue, setSelectedValue] = useState("Galpão Zona Norte")
 
   // Função auxiliar para calcular % e aplicar estilo de largura
   const getBarWidth = (value: number) => {
@@ -15,50 +17,7 @@ function Dashboard({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Status do Galpão</Text>
-
-      {/* Disponíveis */}
-      <View style={styles.barra}>
-        <Text style={styles.titulo}>Disponíveis: {data.disponiveis}</Text>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: getBarWidth(data.disponiveis), backgroundColor: "#4caf50" }]}
-          />
-        </View>
-      </View>
-
-      {/* Investigação */}
-      <View style={styles.barra}>
-        <Text style={styles.titulo}>Investigação/Técnico: {data.investigacao}</Text>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: getBarWidth(data.investigacao), backgroundColor: "#f44336" }]}
-          />
-        </View>
-      </View>
-
-      {/* Em trânsito */}
-      <View style={styles.barra}>
-        <Text style={styles.titulo}>Em trânsito: {data.emTransitoHoje}</Text>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: getBarWidth(data.emTransitoHoje), backgroundColor: "#2196f3" }]}
-          />
-        </View>
-      </View>
-
-      {/* Total */}
-      <View style={styles.barra}>
-        <Text style={styles.titulo}>Total de Motos no Galpão: {data.total}</Text>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: "100%", backgroundColor: "#888" }]}
-          />
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("MapaPatio")}>
-        <Text style={styles.btnText}>Ver Mapa de Setor</Text>
-      </TouchableOpacity>
+      <Text>Escolha um galpão:</Text>
     </View>
   );
 }

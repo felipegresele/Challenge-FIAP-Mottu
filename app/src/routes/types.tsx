@@ -6,6 +6,7 @@ export type RootStackParamList = {
     MotoLista: undefined,
     Dashboard: undefined,
     CheckMoto: undefined,
+    Teste: undefined,
 }
 
 export type RootStackParamListMenu = {
