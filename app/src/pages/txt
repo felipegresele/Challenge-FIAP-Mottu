@@ -1,0 +1,258 @@
+// import React, { useState } from "react";
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   StyleSheet,
+//   TouchableOpacity,
+//   Modal,
+// } from "react-native";
+// import { useNavigation } from "@react-navigation/native";
+// import { motos } from "../api/motos";
+// import { Moto } from "../types/Moto";
+
+// const getCorStatus = (status: string) => {
+//   switch (status) {
+//     case "Disponível":
+//       return "#32CD32";
+//     case "Em movimento":
+//       return "#1E90FF";
+//     case "Indisponível":
+//       return "#FF4500";
+//     default:
+//       return "#ccc";
+//   }
+// };
+
+// const gerarHorarioAleatorio = () => {
+//   const hora = Math.floor(Math.random() * 12 + 7); // entre 7h e 19h
+//   const minutos = Math.floor(Math.random() * 60);
+//   return `${hora.toString().padStart(2, "0")}:${minutos
+//     .toString()
+//     .padStart(2, "0")}`;
+// };
+
+// function MapaPatio() {
+//   const navigation = useNavigation();
+//   const [gridAtual, setGridAtual] = useState(0);
+//   const [modalVisivel, setModalVisivel] = useState(false);
+//   const [motoSelecionada, setMotoSelecionada] = useState<Moto | null>(null);
+//   const [motivoSelecionado, setMotivoSelecionado] = useState("");
+//   const [horarioRetirada, setHorarioRetirada] = useState("");
+
+//   const totalGrids = 5;
+//   const motosPorGrid = 20;
+
+//   const setores = motos.slice(
+//     gridAtual * motosPorGrid,
+//     (gridAtual + 1) * motosPorGrid
+//   );
+
+//   const abrirModal = (moto: Moto) => {
+//     const indexAleatorio = Math.floor(Math.random() * motivosIndisponivel.length);
+//     setMotoSelecionada(moto);
+//     setMotivoSelecionado(motivosIndisponivel[indexAleatorio]);
+//     setHorarioRetirada(gerarHorarioAleatorio());
+//     setModalVisivel(true);
+//   };
+
+//   const irParaInvestigacao = () => {
+//     setModalVisivel(false);
+//     navigation.navigate("Investigacao", { moto: motoSelecionada });
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.titulo}>Mapa do Pátio - Setor {gridAtual + 1}</Text>
+
+//       <View style={styles.gridSelector}>
+//         {[...Array(totalGrids)].map((_, index) => (
+//           <TouchableOpacity
+//             key={index}
+//             style={[
+//               styles.botao,
+//               gridAtual === index && styles.botaoSelecionado,
+//             ]}
+//             onPress={() => setGridAtual(index)}
+//           >
+//             <Text style={styles.textoBotao}>Setor {index + 1}</Text>
+//           </TouchableOpacity>
+//         ))}
+//       </View>
+
+//       <FlatList
+//         data={setores}
+//         numColumns={5}
+//         keyExtractor={(item) => item.id.toString()}
+//         renderItem={({ item }) => (
+//           <TouchableOpacity
+//             onPress={() => abrirModal(item)}
+//             style={[
+//               styles.setor,
+//               {
+//                 backgroundColor: getCorStatus(item.status),
+//                 borderWidth: item.status === "Indisponível" ? 2 : 0,
+//                 borderColor: "#fff",
+//               },
+//             ]}
+//           >
+//             <Text style={styles.motoID}>{item.entregador.split(" ")[0]}</Text>
+//             <Text style={styles.status}>{item.status}</Text>
+//           </TouchableOpacity>
+//         )}
+//       />
+
+//       <Modal
+//         transparent
+//         visible={modalVisivel}
+//         animationType="fade"
+//         onRequestClose={() => setModalVisivel(false)}
+//       >
+//         <View style={styles.modalContainer}>
+//           <View style={styles.modalBox}>
+//             <Text style={styles.modalTitulo}>
+//               {motoSelecionada?.status === "Indisponível"
+//                 ? "Moto Indisponível"
+//                 : "Informações da Moto"}
+//             </Text>
+//             {motoSelecionada && (
+//               <>
+//                 <Text style={styles.modalTexto}>
+//                   Entregador: {motoSelecionada.entregador}
+//                 </Text>
+//                 <Text style={styles.modalTexto}>
+//                   Modelo: {motoSelecionada.modelo}
+//                 </Text>
+//                 <Text style={styles.modalTexto}>
+//                   Chassi: {motoSelecionada.chassi}
+//                 </Text>
+//                 <Text style={styles.modalTexto}>
+//                   Retirada: {horarioRetirada}
+//                 </Text>
+//                 {motoSelecionada.status === "Indisponível" && (
+//                   <Text style={styles.modalTexto}>
+//                     Motivo: {motivoSelecionado}
+//                   </Text>
+//                 )}
+//               </>
+//             )}
+
+//             {motoSelecionada?.status === "Indisponível" ? (
+//               <View style={{ flexDirection: "row", marginTop: 15 }}>
+//                 <TouchableOpacity
+//                   style={[styles.modalBotao, { backgroundColor: "green", marginRight: 10 }]}
+//                   onPress={() => setModalVisivel(false)}
+//                 >
+//                   <Text style={styles.modalBotaoTexto}>Tudo certo</Text>
+//                 </TouchableOpacity>
+//                 <TouchableOpacity
+//                   style={[styles.modalBotao, { backgroundColor: "red" }]}
+//                   onPress={irParaInvestigacao}
+//                 >
+//                   <Text style={styles.modalBotaoTexto}>Investigar</Text>
+//                 </TouchableOpacity>
+//               </View>
+//             ) : (
+//               <TouchableOpacity
+//                 style={[styles.modalBotao, { marginTop: 15 }]}
+//                 onPress={() => setModalVisivel(false)}
+//               >
+//                 <Text style={styles.modalBotaoTexto}>Fechar</Text>
+//               </TouchableOpacity>
+//             )}
+//           </View>
+//         </View>
+//       </Modal>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#000",
+//     padding: 20,
+//     alignItems: "center",
+//   },
+//   titulo: {
+//     fontSize: 22,
+//     color: "#fff",
+//     marginBottom: 10,
+//     fontWeight: "bold",
+//   },
+//   gridSelector: {
+//     flexDirection: "row",
+//     marginBottom: 16,
+//     flexWrap: "wrap",
+//     justifyContent: "center",
+//   },
+//   botao: {
+//     backgroundColor: "#444",
+//     paddingVertical: 6,
+//     paddingHorizontal: 12,
+//     borderRadius: 6,
+//     margin: 4,
+//   },
+//   botaoSelecionado: {
+//     backgroundColor: "#1E90FF",
+//   },
+//   textoBotao: {
+//     color: "#fff",
+//     fontSize: 13,
+//   },
+//   setor: {
+//     width: 60,
+//     height: 60,
+//     margin: 6,
+//     borderRadius: 8,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     elevation: 4,
+//   },
+//   motoID: {
+//     fontSize: 14,
+//     fontWeight: "bold",
+//     color: "#fff",
+//   },
+//   status: {
+//     fontSize: 10,
+//     color: "#fff",
+//     textAlign: "center",
+//     marginTop: 4,
+//   },
+//   modalContainer: {
+//     flex: 1,
+//     backgroundColor: "rgba(0, 0, 0, 0.7)",
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   modalBox: {
+//     backgroundColor: "#222",
+//     padding: 20,
+//     borderRadius: 10,
+//     width: "80%",
+//     alignItems: "center",
+//   },
+//   modalTitulo: {
+//     fontSize: 20,
+//     fontWeight: "bold",
+//     color: "#fff",
+//     marginBottom: 10,
+//   },
+//   modalTexto: {
+//     fontSize: 16,
+//     color: "#ddd",
+//     marginBottom: 6,
+//   },
+//   modalBotao: {
+//     paddingVertical: 8,
+//     paddingHorizontal: 16,
+//     borderRadius: 6,
+//   },
+//   modalBotaoTexto: {
+//     color: "#fff",
+//     fontSize: 16,
+//   },
+// });
+
+// export default MapaPatio;
